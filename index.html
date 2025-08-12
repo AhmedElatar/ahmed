@@ -7,49 +7,47 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<!-- إضافة Firebase SDK المعدلة -->
+<script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
 <style>
   :root{
     --bg:#f8f9fa;
     --card:#ffffff;
     --text:#00629e;
     --muted:#718096;
-    --accent:#052144; /* كحلي غامق */
+    --accent:#052144;
     --accent-dark:#052144;
     --accent-light:#bee3f8;
     --danger:#e53e3e;
     --font-main: 'Tajawal', "Segoe UI", Tahoma, Arial, sans-serif;
   }
+  /* باقي الستايل كما هو بدون تغيير */
   html,body{height:100%;margin:0;font-family: var(--font-main);direction:rtl}
   body{background:var(--bg);color:var(--text);transition:background .25s,color .25s}
   .dark{--bg:#1a202c;--card:#2d3748;--text:#f7fafc;--muted:#a0aec0;--accent:#1361a0;--accent-dark:#3182ce;--accent-light:#ebf8ff}
 
-  /* top bar */
   header{position:sticky;top:0;z-index:40;background:var(--accent-dark);color:white;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)}
   .brand{display:flex;gap:12px;align-items:center}
   .logo{width:44px;height:44px;border-radius:8px;background:rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;font-weight:700;font-family: var(--font-main);font-size: 1.4rem}
   header h1{font-size:18px;margin:0;font-weight:700}
-  /* small left toggle */
   .left-controls{display:flex;align-items:center;gap:8px}
   .theme-toggle{width:40px;height:36px;border-radius:8px;border:0;background:rgba(255,255,255,0.12);color:white;cursor:pointer;font-weight:700;font-size:1.1rem}
 
-  /* layout */
   .wrap{max-width:1100px;margin:20px auto;padding:0 16px}
   .hero{background:var(--card);padding:18px;border-radius:12px;box-shadow:0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-bottom:20px}
   .hero .text{flex:1;min-width:220px}
   .hero h2{margin:0 0 6px;font-size:20px;font-weight:700;color:var(--accent-dark)}
   .hero p{margin:0;color:var(--muted);line-height:1.6;font-size:15px}
 
-  /* search bar */
   .search-container{width:100%;margin:20px 0;position:relative}
   .search-input{width:100%;padding:12px 16px;padding-left:45px;border-radius:8px;border:1px solid rgba(0,0,0,0.1);font-family: var(--font-main);font-size:15px;background-color:var(--card);color:var(--text);box-shadow:0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)}
   .search-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-light)}
   .search-icon{position:absolute;right:15px;top:50%;transform:translateY(-50%);color:var(--muted)}
 
-  /* grid */
   .grid{display:grid;grid-template-columns: 1fr 380px;gap:16px;margin-top:16px}
   @media(max-width:920px){ .grid{grid-template-columns:1fr} }
 
-  /* left column (lists) */
   .sections{display:flex;flex-direction:column;gap:14px}
   .section{background:var(--card);padding:12px;border-radius:10px;box-shadow:0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);border:1px solid rgba(0,0,0,0.05)}
   .section h3{margin:0 0 8px;color:var(--accent-dark);font-weight:700;font-size:16px;padding-bottom:8px;border-bottom:1px solid rgba(0,0,0,0.05)}
@@ -68,7 +66,6 @@
   .tel{background:var(--accent-dark);color:white;padding:8px 12px;border-radius:6px;text-decoration:none;font-weight:700;font-family: var(--font-main);font-size:13px;transition:all 0.2s}
   .tel:hover{background:var(--accent);transform:translateY(-1px)}
 
-  /* right column (form + stats) */
   aside .card{background:var(--card);padding:16px;border-radius:10px;box-shadow:0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);border:1px solid rgba(0,0,0,0.05)}
   label{display:block;font-size:13px;color:var(--muted);margin-top:12px;margin-bottom:4px;font-weight:500}
   input,select,textarea{width:100%;padding:10px 12px;border-radius:6px;border:1px solid rgba(0,0,0,0.1);background:transparent;color:var(--text);resize:vertical;font-family: var(--font-main);font-size:14px;transition:all 0.2s}
@@ -78,10 +75,8 @@
   .primary:hover{background:var(--accent);transform:translateY(-1px)}
   .muted{color:var(--muted);font-size:13px}
 
-  /* footer */
   footer{margin-top:24px;text-align:center;color:var(--muted);font-size:13px;padding:16px 12px;border-top:1px solid rgba(0,0,0,0.05)}
 
-  /* small helpers */
   .row{display:flex;gap:8px}
   .pill{padding:6px 12px;border-radius:999px;background:var(--accent-light);font-weight:700;color:var(--accent-dark);font-size:13px}
   .empty{color:var(--muted);padding:16px;text-align:center;font-size:14px}
@@ -120,65 +115,54 @@
     </div>
   </div>
 
-  <!-- New Search Bar -->
   <div class="search-container">
     <input id="globalSearch" class="search-input" type="search" placeholder="ابحث عن خدمة، رقم، أو اسم..." aria-label="بحث">
     <div class="search-icon">🔍</div>
   </div>
 
   <div class="grid">
-    <!-- left: lists -->
     <div class="sections" id="listsColumn">
-      <!-- Emergency -->
       <section class="section" id="sec-emergency">
         <h3>🚨 طوارئ</h3>
         <div class="list" id="list-emergency"></div>
       </section>
 
-      <!-- Doctors -->
       <section class="section" id="sec-doctors">
         <h3>🩺 أطباء</h3>
         <div class="list" id="list-doctors"></div>
       </section>
 
-      <!-- Pharmacies -->
       <section class="section" id="sec-pharmacies">
         <h3>💊 صيدليات</h3>
         <div class="list" id="list-pharmacies"></div>
       </section>
 
-      <!-- Electricity -->
       <section class="section" id="sec-electric">
         <h3>⚡ كهرباء</h3>
         <div class="list" id="list-electric"></div>
       </section>
 
-      <!-- Water -->
       <section class="section" id="sec-water">
         <h3>💧 مياه</h3>
         <div class="list" id="list-water"></div>
       </section>
 
-      <!-- Transport -->
       <section class="section" id="sec-transport">
         <h3>🛺 عربيات  / توكتوك</h3>
         <div class="list" id="list-transport"></div>
       </section>
 
-      <!-- Gov -->
       <section class="section" id="sec-gov">
         <h3>🏛️ خدمات حكومية</h3>
         <div class="list" id="list-gov"></div>
       </section>
 
-      <!-- Others -->
       <section class="section" id="sec-others">
         <h3>🔧 خدمات صيانة وورش</h3>
         <div class="list" id="list-others"></div>
       </section>
     </div>
 
-    <!-- right: form + stats -->
     <aside>
       <div class="card">
         <h3>➕ إضافة / تعديل خدمة</h3>
@@ -221,7 +205,7 @@
       </div>
 
       <div class="card" style="margin-top:16px;text-align:center">
-        <div class="muted" style="font-size:13px">حفظ محليًا في جهازك — لا يحتاج تسجيل</div>
+        <div class="muted" style="font-size:13px">بيانات متزامنة مع الجميع — تحديث فوري</div>
         <div style="margin-top:10px;font-size:13px;color:var(--muted)">Made by Eng. Ahmed Elattar</div>
       </div>
     </aside>
@@ -233,8 +217,24 @@
 </main>
 
 <script>
+/* ------------- Firebase Configuration ------------- */
+const firebaseConfig = {
+  apiKey: "AIzaSyDpqhoWqsIDVrrOAOMuWo_e-KkR06c4p6Y",
+  authDomain: "shbraris-project.firebaseapp.com",
+  databaseURL: "https://shbraris-project-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "shbraris-project",
+  storageBucket: "shbraris-project.firebasestorage.app",
+  messagingSenderId: "879897156073",
+  appId: "1:879897156073:web:fc6faab5f1c373dda01378",
+  measurementId: "G-N5EZQ0394K"
+};
+
+// Initialize Firebase
+const app = firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+
 /* ------------- Data & Storage ------------- */
-const STORAGE_KEY = 'shbraris_contacts_v1';
+const DB_PATH = 'shbraris_contacts';
 
 /* default sample data */
 const DEFAULT = [
@@ -247,20 +247,44 @@ const DEFAULT = [
   {id:idGen(), cat:'doctors', name:'د. أحمد علي', phone:'01055556666', address:'عيادة عامة', note:'أوقات 9-1'}
 ];
 
-let contacts = load();
+let contacts = [];
 
 /* ------------- Helpers ------------- */
 function idGen(){ return 'id'+Math.random().toString(36).slice(2,9) }
-function save(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(contacts)); renderAll(); updateStats(); }
-function load(){
-  try{
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if(!raw) { localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT)); return DEFAULT.slice(); }
-    return JSON.parse(raw);
-  }catch(e){ localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT)); return DEFAULT.slice(); }
-}
 function findById(id){ return contacts.find(c=>c.id===id) }
-function removeById(id){ contacts = contacts.filter(c=>c.id!==id); save(); }
+
+/* ------------- Firebase Operations (محدثة) ------------- */
+function save(){
+  database.ref(DB_PATH).set(contacts)
+    .then(() => {
+      console.log("تم حفظ البيانات بنجاح");
+      updateStats();
+    })
+    .catch(error => {
+      console.error("خطأ في الحفظ:", error);
+      alert("حدث خطأ أثناء حفظ البيانات!");
+    });
+}
+
+function load(){
+  database.ref(DB_PATH).on('value', (snapshot) => {
+    const data = snapshot.val();
+    contacts = data ? Object.values(data) : [];
+    renderAll();
+    updateStats();
+    
+    if(!data || contacts.length === 0){
+      database.ref(DB_PATH).set(DEFAULT)
+        .then(() => console.log("تم تحميل البيانات الافتراضية"))
+        .catch(error => console.error("خطأ:", error));
+    }
+  });
+}
+
+function removeById(id){
+  contacts = contacts.filter(c=>c.id!==id);
+  save();
+}
 
 /* ------------- Rendering ------------- */
 const cats = {
@@ -275,13 +299,11 @@ const cats = {
 };
 
 function renderAll(filter=''){
-  // clear lists
   Object.values(cats).forEach(elId => document.getElementById(elId).innerHTML='');
 
   const q = filter.trim().toLowerCase();
 
   contacts.forEach(item=>{
-    // search filter
     if(q){
       const hay = (item.name+' '+(item.address||'')+' '+(item.phone||'')+' '+(item.note||'')+' '+item.cat).toLowerCase();
       if(!hay.includes(q)) return;
@@ -304,7 +326,6 @@ function renderAll(filter=''){
     cont.appendChild(div);
   });
 
-  // show empty notices
   Object.keys(cats).forEach(k=>{
     const el = document.getElementById(cats[k]);
     if(el.children.length===0){
@@ -333,7 +354,6 @@ saveBtn.addEventListener('click', ()=>{
 
   const id = editingId.value;
   if(id){
-    // update
     const obj = findById(id);
     if(obj){
       obj.cat = cat; obj.name = name; obj.phone = phone; obj.address = addr; obj.note = note;
@@ -341,10 +361,8 @@ saveBtn.addEventListener('click', ()=>{
       saveBtn.textContent = 'حفظ';
     }
   } else {
-    // create
     contacts.unshift({id:idGen(), cat, name, phone, address:addr, note});
   }
-  // clear form
   inputCategory.value='emergency'; inputName.value=''; inputPhone.value=''; inputAddress.value=''; inputNote.value='';
   save();
 });
@@ -410,18 +428,12 @@ function escapeHtml(s){ if(!s && s!==0) return ''; return String(s).replace(/[&<
 /* ------------- Init ------------- */
 document.getElementById('year').textContent = new Date().getFullYear();
 (function init(){
-  // apply stored theme
   const t = localStorage.getItem('shbr_theme') || 'light';
   applyTheme(t);
-
-  renderAll();
-  updateStats();
-
-  // hero image colored square (just decorative)
+  load();
   const heroImg = document.getElementById('heroImg');
   heroImg.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)';
 })();
-
 </script>
 </body>
 </html>
